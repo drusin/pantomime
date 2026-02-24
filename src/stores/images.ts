@@ -1,24 +1,18 @@
 import { defineStore } from "pinia";
 import gateway from "./gateway";
+import { findImage, saveImage } from "./indexedDbHandler";
 
 export const useImagesStore = defineStore('images', {
-  state: () => {
-    return {
-      images: new Map<string, string>(),
-    }
-  },
   actions: {
     async getImage(subject: string) {
-      if (this.images.has(subject)) {
-        return Promise.resolve(this.images.get(subject));
+      const image = await findImage(subject);
+      if (image) {
+        return image;
       }
       const result = await gateway.generatePicture(subject);
-      this.images.set(subject, result);
+      saveImage(subject, result);
       return result;
     }
   }
 });
 
-function getFromIndexedDb(subject: string) {
-
-}
