@@ -7,20 +7,29 @@ const IMAGE = {
   C_IMAGE: 'image',
 };
 
-async function findImage(subject: string) {
-  const db = await getDb();
-  const transaction = db.transaction(IMAGE.STORE_NAME, 'readonly');
-  const objectStore = transaction.objectStore(IMAGE.STORE_NAME);
+type Image = {
+  subject: string,
+  image: string
+}
+
+async function findImage(subject: string): Promise<string> {
+  const objectStore = await getObjectStore(IMAGE.STORE_NAME, 'readonly');
   const request = objectStore.get(subject);
   return await new Promise((success) => {
     request.onsuccess = () => success(request.result?.[IMAGE.C_IMAGE] || '');
   });
 }
 
+async function getAllSavedImages(): Promise<Array<Image>> {
+  const objectStore = await getObjectStore(IMAGE.STORE_NAME, 'readonly');
+  const request = objectStore.getAll();
+  return await new Promise((success) => {
+    request.onsuccess = () => success(request.result as Array<Image>);
+  });
+}
+
 async function saveImage(subject: string, image: string) {
-  const db = await getDb();
-  const transaction = db.transaction(IMAGE.STORE_NAME, 'readwrite');
-  const objectStore = transaction.objectStore(IMAGE.STORE_NAME);
+  const objectStore = await getObjectStore(IMAGE.STORE_NAME, 'readwrite');
   const request = objectStore.add({
     [IMAGE.C_SUBJECT]: subject,
     [IMAGE.C_IMAGE]: image
@@ -28,6 +37,12 @@ async function saveImage(subject: string, image: string) {
   await new Promise((success) => {
     request.onsuccess = success;
   });
+}
+
+async function getObjectStore(storeName: string, mode: IDBTransactionMode) {
+  const db = await getDb();
+  const transaction = db.transaction(storeName, mode);
+  return transaction.objectStore(storeName);
 }
 
 async function getDb() {
@@ -46,4 +61,4 @@ function upgradeDb(event: Event) {
   imageStore.createIndex(IMAGE.C_IMAGE, IMAGE.C_IMAGE);
 }
 
-export { findImage, saveImage };
+export { findImage, getAllSavedImages, saveImage };
