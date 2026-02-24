@@ -23,7 +23,7 @@ export const useWordsStore = defineStore('words', () => {
     do {
       const i = Math.floor(Math.random() * all.length);
       word = all[i] || '';
-    } while (!word && !used.value.find((w) => w === word));
+    } while (!word || used.value.some((el) => el === word));
     used.value.push(word);
     return word;
   }
