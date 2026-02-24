@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import { nextWord } from '@/words/nextWord';
 import { useImagesStore } from '@/stores/images';
+import { ref } from "vue";
+import { useWordsStore } from "@/stores/words.ts";
 const store = useImagesStore();
+const words = useWordsStore();
 
-const title = nextWord();
-const image = await store.getImage(title);
+const title = words.nextWord();
+const image = ref('');
+store.getImage(title).then((result) => {
+  image.value = result as string;
+});
 </script>
 <template>
   <h2>Spiel läuft!</h2>
