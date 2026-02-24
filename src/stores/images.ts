@@ -18,3 +18,7 @@ export const useImagesStore = defineStore('images', {
     }
   }
 });
+
+function getFromIndexedDb(subject: string) {
+
+}
