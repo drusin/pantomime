@@ -1,6 +1,7 @@
 const DB_NAME = 'pantomime_db';
 const DB_VERSION = 1;
 
+// ##################### images #######################
 const IMAGE = {
   STORE_NAME: 'images',
   C_SUBJECT: 'subject',
@@ -10,7 +11,7 @@ const IMAGE = {
 type Image = {
   subject: string,
   image: string
-}
+};
 
 async function findImage(subject: string): Promise<string> {
   const objectStore = await getObjectStore(IMAGE.STORE_NAME, 'readonly');
@@ -39,6 +40,44 @@ async function saveImage(subject: string, image: string) {
   });
 }
 
+// ###################### profiles ########################
+const PROFILES = {
+  STORE_NAME: 'profiles',
+  C_ID: 'id',
+  C_IMAGE: 'image',
+};
+
+type Profile = {
+  id: number,
+  image: string,
+};
+
+async function createNewProfile(image: string): Promise<Profile> {
+  const objectStore = await getObjectStore(PROFILES.STORE_NAME, 'readwrite');
+  const request = objectStore.add({ image });
+  const id: number = await new Promise((success) => {
+    request.onsuccess = () => success(request.result as number);
+  });
+  return await getProfile(id);
+}
+
+async function getProfile(id: number): Promise<Profile> {
+  const objectStore = await getObjectStore(PROFILES.STORE_NAME, 'readonly');
+  const request = objectStore.get(id);
+  return await new Promise((success) => {
+    request.onsuccess = () => success(request.result as Profile);
+  });
+}
+
+async function getAllProfiles(): Promise<Array<Profile>> {
+  const objectStore = await getObjectStore(PROFILES.STORE_NAME, 'readonly');
+  const request = objectStore.getAll();
+  return await new Promise((success) => {
+    request.onsuccess = () => success(request.result as Array<Profile>);
+  });
+}
+
+// ###################### helpers ############################
 async function getObjectStore(storeName: string, mode: IDBTransactionMode) {
   const db = await getDb();
   const transaction = db.transaction(storeName, mode);
@@ -59,6 +98,11 @@ function upgradeDb(event: Event) {
   const db: IDBDatabase = (event.target as IDBRequest).result;
   const imageStore = db.createObjectStore(IMAGE.STORE_NAME, { keyPath: IMAGE.C_SUBJECT });
   imageStore.createIndex(IMAGE.C_IMAGE, IMAGE.C_IMAGE);
+  const profileStore = db.createObjectStore(PROFILES.STORE_NAME, { keyPath: PROFILES.C_ID, autoIncrement: true });
+  profileStore.createIndex(PROFILES.C_IMAGE, IMAGE.C_IMAGE);
 }
 
-export { findImage, getAllSavedImages, saveImage };
+export {
+  findImage, getAllSavedImages, saveImage,
+  createNewProfile, getProfile, getAllProfiles
+};
