@@ -1,3 +1,5 @@
+import type { Profile, Image } from "@/types";
+
 const DB_NAME = 'pantomime_db';
 const DB_VERSION = 1;
 
@@ -6,11 +8,6 @@ const IMAGE = {
   STORE_NAME: 'images',
   C_SUBJECT: 'subject',
   C_IMAGE: 'image',
-};
-
-type Image = {
-  subject: string,
-  image: string
 };
 
 async function findImage(subject: string): Promise<string> {
@@ -45,11 +42,6 @@ const PROFILES = {
   STORE_NAME: 'profiles',
   C_ID: 'id',
   C_IMAGE: 'image',
-};
-
-type Profile = {
-  id: number,
-  image: string,
 };
 
 async function createNewProfile(image: string): Promise<Profile> {

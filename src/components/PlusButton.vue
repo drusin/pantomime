@@ -1,16 +1,14 @@
 <script setup lang="ts">
-defineProps<{
-  clickAction: any
-}>();
+defineProps(['clickAction']);
 </script>
 
 <template>
-<button :onclick="clickAction"><img src="/plus.svg" alt="Plus" /></button>
+<button class="small-element" :onclick="clickAction"><img src="/plus.svg" alt="Plus" /></button>
 </template>
 
 <style scoped>
 img {
-  width: 64px;
-  height: 64px;
+  width: 100%;
+  height: 100%;
 }
 </style>

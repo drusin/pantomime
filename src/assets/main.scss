@@ -1,1 +1,11 @@
-@use "@picocss/pico/scss"
+@use "@picocss/pico/scss";
+
+.small-element {
+  width: 4rem;
+  height: 4rem;
+}
+
+.medium-element {
+  width: 10rem;
+  height: 10rem;
+}
