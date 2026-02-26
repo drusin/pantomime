@@ -11,6 +11,9 @@ defineProps<{
   </div>
 </template>
 <style scoped>
+.medium-element {
+  margin: 1rem;
+}
 img {
   object-fit: contain;
   border-radius: 50%;

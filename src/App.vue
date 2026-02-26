@@ -3,6 +3,12 @@ import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <RouterView />
+  <div class="main">
+    <RouterView />
+  </div>
 </template>
-
+<style scoped>
+.main {
+  padding: 1em;
+}
+</style>

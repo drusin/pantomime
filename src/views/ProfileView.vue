@@ -4,7 +4,6 @@ import NewProfile from "@/components/NewProfile.vue";
 import { ref, useTemplateRef, type Ref } from "vue";
 import { useProfileStore } from "@/stores/profiles";
 import type { Profile } from "@/types";
-import { l } from "vue-router/dist/index-DJQJwTR2.js";
 import AvatarComponent from "@/components/AvatarComponent.vue";
 
 const newProfile = useTemplateRef('new-profile');
@@ -20,10 +19,28 @@ async function loadProfiles() {
 
 </script>
 <template>
-  <h1>Spieler</h1>
   <div class="container">
-    <PlusButton :clickAction="openProfilePopup"></PlusButton>
-    <AvatarComponent v-for="profile in profiles" v-bind:key="profile.id" :profile="profile"></AvatarComponent>
+    <header>
+      <h1>Spieler</h1>
+      <PlusButton :clickAction="openProfilePopup"></PlusButton>
+    </header>
+    <main class="container">
+      <AvatarComponent v-for="profile in profiles" v-bind:key="profile.id"
+                       :profile="profile"></AvatarComponent>
+    </main>
     <NewProfile ref="new-profile" @profileCreated="loadProfiles"></NewProfile>
   </div>
 </template>
+<style scoped>
+header {
+  display: flex;
+  justify-content: space-between;
+}
+
+main {
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+</style>
