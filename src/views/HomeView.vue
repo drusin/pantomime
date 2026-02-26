@@ -6,11 +6,14 @@ words.reset();
 </script>
 
 <template>
-  <div class="links">
-      <RouterLink to="/play">Los gehts!</RouterLink>
-      <RouterLink to="/profiles">Spieler</RouterLink>
-      <RouterLink to="/gallery">Gallerie</RouterLink>
-  </div>
+  <header class="container">Pantomime</header>
+  <main class="container">
+    <div class="links">
+        <RouterLink to="/play">Los gehts!</RouterLink>
+        <RouterLink to="/profiles">Spieler</RouterLink>
+        <RouterLink to="/gallery">Gallerie</RouterLink>
+    </div>
+  </main>
 </template>
 
 <style scoped>
