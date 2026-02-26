@@ -5,6 +5,7 @@ import { ref, useTemplateRef, type Ref } from "vue";
 import { useProfileStore } from "@/stores/profiles";
 import type { Profile } from "@/types";
 import AvatarComponent from "@/components/AvatarComponent.vue";
+import PictureWidget from "@/components/PictureWidget.vue";
 
 const newProfile = useTemplateRef('new-profile');
 const openProfilePopup = () => newProfile.value?.openDialog();
@@ -17,6 +18,16 @@ async function loadProfiles() {
   profiles.value = await profileStore.getAllProfiles();
 }
 
+const pictureWidget = useTemplateRef('picture-widget');
+function openPictureWidget(profile: Profile) {
+  pictureWidget.value?.open(profile.image, profile.id.toString());
+}
+
+async function deletePressed(idStr: string) {
+  await profileStore.deleteProfile(parseInt(idStr));
+  await loadProfiles();
+}
+
 </script>
 <template>
   <div class="container">
@@ -26,9 +37,10 @@ async function loadProfiles() {
     </header>
     <main class="container">
       <AvatarComponent v-for="profile in profiles" v-bind:key="profile.id"
-                       :profile="profile"></AvatarComponent>
+                       :profile="profile" @click="openPictureWidget(profile)"></AvatarComponent>
     </main>
     <NewProfile ref="new-profile" @profileCreated="loadProfiles"></NewProfile>
+    <PictureWidget ref="picture-widget" @delete="(id) => deletePressed(id)"></PictureWidget>
   </div>
 </template>
 <style scoped>

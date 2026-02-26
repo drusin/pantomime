@@ -37,6 +37,14 @@ async function saveImage(subject: string, image: string) {
   });
 }
 
+async function deleteImage(subject: string) {
+  const objectStore = await getObjectStore(IMAGE.STORE_NAME, 'readwrite');
+  const request = objectStore.delete(subject);
+  return new Promise((success) => {
+    request.onsuccess = success;
+  });
+}
+
 // ###################### profiles ########################
 const PROFILES = {
   STORE_NAME: 'profiles',
@@ -69,6 +77,14 @@ async function getAllProfiles(): Promise<Array<Profile>> {
   });
 }
 
+async function deleteProfile(id: number) {
+  const objectStore = await getObjectStore(PROFILES.STORE_NAME, 'readwrite');
+  const request = objectStore.delete(id);
+  return await new Promise((success) => {
+    request.onsuccess = success;
+  });
+}
+
 // ###################### helpers ############################
 async function getObjectStore(storeName: string, mode: IDBTransactionMode) {
   const db = await getDb();
@@ -95,6 +111,6 @@ function upgradeDb(event: Event) {
 }
 
 export {
-  findImage, getAllSavedImages, saveImage,
-  createNewProfile, getProfile, getAllProfiles
+  findImage, getAllSavedImages, saveImage, deleteImage,
+  createNewProfile, getProfile, getAllProfiles, deleteProfile
 };

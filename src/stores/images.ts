@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import gateway from "./gateway";
-import { findImage, saveImage } from "./indexedDbHandler";
+import { deleteImage, findImage, getAllSavedImages, saveImage } from "./indexedDbHandler";
 
 export const useImagesStore = defineStore('images', {
   actions: {
@@ -15,7 +15,13 @@ export const useImagesStore = defineStore('images', {
       const result = await gateway.generatePicture(subject);
       saveImage(subject, result);
       return result;
-    }
+    },
+    async getAllSavedImages() {
+      return await getAllSavedImages();
+    },
+    async deleteSavedImage(subject: string) {
+      await deleteImage(subject);
+    },
   }
 });
 

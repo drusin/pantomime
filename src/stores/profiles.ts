@@ -1,5 +1,10 @@
 import { defineStore } from "pinia";
-import { createNewProfile, getAllProfiles, getProfile } from "@/stores/indexedDbHandler.ts";
+import {
+  createNewProfile,
+  deleteProfile,
+  getAllProfiles,
+  getProfile
+} from "@/stores/indexedDbHandler.ts";
 
 export const useProfileStore = defineStore('profiles', {
   actions: {
@@ -12,5 +17,8 @@ export const useProfileStore = defineStore('profiles', {
     async getAllProfiles() {
       return await getAllProfiles();
     },
+    async deleteProfile(id: number) {
+      await deleteProfile(id);
+    }
   },
 })

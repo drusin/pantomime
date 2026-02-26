@@ -23,7 +23,7 @@ const fileSelected = async (e: Event) => {
   }
   const base64 = await fileToBase64(file);
   const profile = await profileStore.createProfile(base64);
-  input.value = null;
+  input.value = '';
   emit('profileCreated', profile.id);
   close();
 }

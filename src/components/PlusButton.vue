@@ -3,7 +3,7 @@ defineProps(['clickAction']);
 </script>
 
 <template>
-<button class="small-element" :onclick="clickAction"><img src="/plus.svg" alt="Plus" /></button>
+<button class="small-element" @click="clickAction"><img src="/plus.svg" alt="Plus" /></button>
 </template>
 
 <style scoped>
