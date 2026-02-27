@@ -20,12 +20,6 @@ defineProps<{
   align-items: center;
 }
 
-footer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 img {
   flex: 1;
   min-height: 0;
