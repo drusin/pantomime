@@ -5,7 +5,7 @@ import { ref, useTemplateRef, type Ref } from "vue";
 import { useProfileStore } from "@/stores/profiles";
 import type { Profile } from "@/types";
 import AvatarComponent from "@/components/AvatarComponent.vue";
-import PictureWidget from "@/components/PictureWidget.vue";
+import PictureWidget from "@/widgets/PictureWidget.vue";
 
 const newProfile = useTemplateRef('new-profile');
 const openProfilePopup = () => newProfile.value?.openDialog();

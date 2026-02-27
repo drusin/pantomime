@@ -4,6 +4,9 @@ import { ref } from "vue";
 import { useWordsStore } from "@/stores/words.ts";
 import CardComponent from "@/components/CardComponent.vue";
 import type { Image } from "@/types.ts";
+import { useGameStore } from "@/stores/game.ts";
+import GameSettingsWidget from "@/widgets/GameSettingsWidget.vue";
+import SelectPlayersWidget from "@/widgets/SelectPlayersWidget.vue";
 
 const store = useImagesStore();
 const words = useWordsStore();
@@ -13,12 +16,16 @@ const content = ref<Image | null>(null);
 store.getImage(title).then((result) => {
   content.value = { subject: title, image: result };
 });
+
+useGameStore();
 </script>
 <template>
   <div class="container">
     <header><h1>Spiel läuft!</h1></header>
    <CardComponent :content="content"></CardComponent>
   </div>
+  <GameSettingsWidget></GameSettingsWidget>
+  <SelectPlayersWidget></SelectPlayersWidget>
 </template>
 <style scoped>
 .container {

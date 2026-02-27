@@ -2,7 +2,7 @@
 import { ref, useTemplateRef } from 'vue';
 import type { Image } from "@/types.ts";
 import CardComponent from "@/components/CardComponent.vue";
-import PictureWidget from "@/components/PictureWidget.vue";
+import PictureWidget from "@/widgets/PictureWidget.vue";
 import { useImagesStore } from "@/stores/images.ts";
 
 const images = ref<Array<Image>>([]);

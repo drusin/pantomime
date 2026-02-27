@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { useWordsStore } from "@/stores/words.ts";
+import { useGameStore } from "@/stores/game.ts";
 
 const words = useWordsStore();
 words.reset();
+const gameStore = useGameStore();
+gameStore.reset();
 </script>
 
 <template>
