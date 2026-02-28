@@ -23,14 +23,16 @@ export const useGameStore = defineStore('gameStore', () => {
       case 'AMOUNT_CARDS':
         return amountPlayed.value >= gameSettings.value.amount;
       case 'AMOUNT_WINS':
-        return currentState.value.values().some((val: number) => val >= gameSettings.value.amount);
+        const arr = [... currentState.value.values()];
+        return arr.some((val: number) => val >= gameSettings.value.amount);
     }
   });
 
   const getWinner= computed(() => {
-    const sorted: Array<{key: number, value: number}> = currentState.value.entries().toArray().sort((left, right) => left.amount - right.amount);
-    return sorted.filter((val) => val.value === sorted[0]!.value)
-      .map((val) => val.key);
+    const arr = [...currentState.value.entries()];
+    const sorted = arr.sort((left, right) => left[1] - right[1]);
+    return sorted.filter((val) => val[1] === sorted[0]![1])
+      .map((val) => val[0]);
   });
 
   function setPlayers(ids: Array<number>) {
