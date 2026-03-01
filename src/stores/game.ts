@@ -2,18 +2,22 @@ import { defineStore } from "pinia";
 import { computed, ref, type Ref, watch } from "vue";
 import type { GameSettings } from "@/types.ts";
 
+const PLAYERS_KEY = 'game.players';
+const SCORES_KEY = "game.scores";
 const STATE_KEY = 'game.state';
 const SETTINGS_KEY = 'game.settings';
 const AMOUNT_PLAYED_KEY = 'game.played';
 
-export const useGameStore = defineStore('gameStore', () => {
+export const useGameStore = defineStore('game', () => {
+  const currentPlayers: Ref<Array<number>> = ref(JSON.parse(localStorage.getItem(PLAYERS_KEY)!) || []);
+  watch(currentPlayers.value, (val) => localStorage.setItem(PLAYERS_KEY, JSON.parse(currentPlayers.value));
   const currentState: Ref<Map<number, number>> = ref(JSON.parse(localStorage.getItem(STATE_KEY)!) || new Map());
   watch(currentState.value, (val) => localStorage.setItem(STATE_KEY, JSON.stringify(val)));
   const gameSettings: Ref<GameSettings> = ref(JSON.parse(localStorage.getItem(SETTINGS_KEY)!) || {
     condition: 'AMOUNT_CARDS',
     amount: 20
   });
-  watch(gameSettings.value, (val) => localStorage.setItem(STATE_KEY, JSON.stringify(val)));
+  watch(gameSettings.value, (val) => localStorage.setItem(SETTINGS_KEY, JSON.stringify(val)));
   const amountPlayed: Ref<number> = ref(parseInt(localStorage.getItem(AMOUNT_PLAYED_KEY)!) || 0);
   watch(amountPlayed, (val) => localStorage.setItem(AMOUNT_PLAYED_KEY, val.toString()));
 

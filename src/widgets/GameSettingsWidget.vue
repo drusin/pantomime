@@ -1,33 +1,49 @@
 <script setup lang="ts">
-import { useTemplateRef } from "vue";
+import { useGameStore } from "@/stores/game";
+import { ref, useTemplateRef } from "vue";
 
-defineExpose({ close });
+defineExpose({ close, openDialog });
+const emit = defineEmits([ 'next' ]);
 
 const dialog = useTemplateRef('dialog');
 function close() {
   dialog.value?.close()
 }
+function openDialog() {
+  dialog.value?.showModal();
+}
+
+const gameStore = useGameStore();
+const gameType = ref(gameStore.gameSettings.condition);
+const amount = ref(gameStore.gameSettings.amount);
+
+function next() {
+  gameStore.gameSettings.condition = gameType.value;
+  gameStore.gameSettings.amount = amount.value;
+  close();
+  emit('next');
+}
+
 </script>
 
 <template>
-<dialog ref="dialog">
+<dialog ref="dialog" open>
   <article>
     <header>Wann ist das Spiel vorbei?</header>
     <fieldset>
       <label>
-        <input type="radio" name="setting">
+        <input type="radio" name="setting" value="AMOUNT_CARDS" v-model="gameType">
         <img class="small-element" src="/cards.svg" />
         Wenn so viele Karten gespielt wurden:
-        <input class="not-full-width" type="number">
       </label>
       <label>
-        <input type="radio" name="setting">
+        <input type="radio" name="setting" value="AMOUNT_WINS" v-model="gameType">
         <img class="small-element" src="/crown.svg" />
         Wenn jemand so viele Punkte hat:
-        <input class="not-full-width" type="number">
       </label>
     </fieldset>
-    <button>Weiter</button>
+    <input type="number" v-model="amount">
+    <button @click="next">Weiter</button>
   </article>
 </dialog>
 </template>

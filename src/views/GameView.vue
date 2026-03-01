@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useImagesStore } from '@/stores/images';
-import { ref } from "vue";
+import { ref, useTemplateRef } from "vue";
 import { useWordsStore } from "@/stores/words.ts";
 import CardComponent from "@/components/CardComponent.vue";
 import type { Image } from "@/types.ts";
@@ -17,6 +17,8 @@ store.getImage(title).then((result) => {
   content.value = { subject: title, image: result };
 });
 
+const selectPlayersWidget = useTemplateRef('select-players');
+
 useGameStore();
 </script>
 <template>
@@ -24,8 +26,8 @@ useGameStore();
     <header><h1>Spiel läuft!</h1></header>
    <CardComponent :content="content"></CardComponent>
   </div>
-  <GameSettingsWidget></GameSettingsWidget>
-  <SelectPlayersWidget></SelectPlayersWidget>
+  <GameSettingsWidget @next="selectPlayersWidget?.open"></GameSettingsWidget>
+  <SelectPlayersWidget ref="select-players"></SelectPlayersWidget>
 </template>
 <style scoped>
 .container {
