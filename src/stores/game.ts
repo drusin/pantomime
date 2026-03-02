@@ -1,18 +1,17 @@
-import { defineStore } from "pinia";
-import { computed, ref, type Ref, watch } from "vue";
-import type { GameSettings } from "@/types.ts";
+import { defineStore } from 'pinia';
+import { computed, ref, type Ref, watch } from 'vue';
+import type { GameSettings } from '@/types.ts';
 
 const PLAYERS_KEY = 'game.players';
-const SCORES_KEY = "game.scores";
-const STATE_KEY = 'game.state';
+const SCORES_KEY = 'game.scores';
 const SETTINGS_KEY = 'game.settings';
 const AMOUNT_PLAYED_KEY = 'game.played';
 
 export const useGameStore = defineStore('game', () => {
   const currentPlayers: Ref<Array<number>> = ref(JSON.parse(localStorage.getItem(PLAYERS_KEY)!) || []);
-  watch(currentPlayers.value, (val) => localStorage.setItem(PLAYERS_KEY, JSON.parse(currentPlayers.value));
-  const currentState: Ref<Map<number, number>> = ref(JSON.parse(localStorage.getItem(STATE_KEY)!) || new Map());
-  watch(currentState.value, (val) => localStorage.setItem(STATE_KEY, JSON.stringify(val)));
+  watch(currentPlayers.value, (val) => localStorage.setItem(PLAYERS_KEY, JSON.stringify(val)));
+  const currentScore: Ref<Array<number>> = ref(JSON.parse(localStorage.getItem(SCORES_KEY)!) || []);
+  watch(currentScore.value, (val) => localStorage.setItem(SCORES_KEY, JSON.stringify(val)));
   const gameSettings: Ref<GameSettings> = ref(JSON.parse(localStorage.getItem(SETTINGS_KEY)!) || {
     condition: 'AMOUNT_CARDS',
     amount: 20
@@ -27,34 +26,44 @@ export const useGameStore = defineStore('game', () => {
       case 'AMOUNT_CARDS':
         return amountPlayed.value >= gameSettings.value.amount;
       case 'AMOUNT_WINS':
-        const arr = [... currentState.value.values()];
-        return arr.some((val: number) => val >= gameSettings.value.amount);
+        return currentScore.value.some((val) => val >= gameSettings.value.amount);
     }
   });
 
-  const getWinner= computed(() => {
-    const arr = [...currentState.value.entries()];
-    const sorted = arr.sort((left, right) => left[1] - right[1]);
-    return sorted.filter((val) => val[1] === sorted[0]![1])
-      .map((val) => val[0]);
+  const getWinner = computed(() => {
+    const winners = [];
+    for (let i = 0; i <= currentScore.value.length; i++) {
+      if (currentScore.value[i] || -1 >= gameSettings.value.amount) {
+        winners.push(currentPlayers.value[i]);
+      }
+    }
+    return winners;
   });
 
   function setPlayers(ids: Array<number>) {
-    ids.forEach((id) => currentState.value.set(id, 0));
+    currentPlayers.value.length = 0;
+    currentScore.value.length = 0;
+    for (const id of ids) {
+      currentPlayers.value.push(id);
+      currentScore.value.push(0);
+    }
   }
 
   function addPoint(playerId: number) {
-    currentState.value.set(playerId, 1 + currentState.value.get(playerId)!);
+    const index = currentPlayers.value.indexOf(playerId);
+    currentScore.value[index] = currentScore.value[index] || 0 + 1;
     amountPlayed.value++;
   }
 
   function reset() {
-    currentState.value = new Map();
+    currentPlayers.value.length = 0;
+    currentScore.value.length = 0;
     amountPlayed.value = 0;
   }
 
   return {
-    currentState,
+    currentPlayers,
+    currentScore,
     gameSettings,
     amountPlayed,
     isGameOver,
