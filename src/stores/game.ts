@@ -20,13 +20,16 @@ export const useGameStore = defineStore('game', () => {
   const amountPlayed: Ref<number> = ref(parseInt(localStorage.getItem(AMOUNT_PLAYED_KEY)!) || 0);
   watch(amountPlayed, (val) => localStorage.setItem(AMOUNT_PLAYED_KEY, val.toString()));
 
-  // eslint-disable-next-line vue/return-in-computed-property
+  const gameIsInProgress = computed(() => currentPlayers.value.length > 0);
+
   const isGameOver = computed(() => {
     switch (gameSettings.value.condition) {
       case 'AMOUNT_CARDS':
         return amountPlayed.value >= gameSettings.value.amount;
       case 'AMOUNT_WINS':
         return currentScore.value.some((val) => val >= gameSettings.value.amount);
+      default:
+        return false;
     }
   });
 
@@ -51,7 +54,7 @@ export const useGameStore = defineStore('game', () => {
 
   function addPoint(playerId: number) {
     const index = currentPlayers.value.indexOf(playerId);
-    currentScore.value[index] = currentScore.value[index] || 0 + 1;
+    currentScore.value[index] = (currentScore.value[index] || 0) + 1;
     amountPlayed.value++;
   }
 
@@ -68,6 +71,7 @@ export const useGameStore = defineStore('game', () => {
     amountPlayed,
     isGameOver,
     getWinner,
+    gameIsInProgress,
     setPlayers,
     addPoint,
     reset,

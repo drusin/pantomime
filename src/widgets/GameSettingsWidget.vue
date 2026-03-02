@@ -27,7 +27,7 @@ function next() {
 </script>
 
 <template>
-<dialog ref="dialog" open>
+<dialog ref="dialog">
   <article>
     <header>Wann ist das Spiel vorbei?</header>
     <fieldset>
