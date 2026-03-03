@@ -27,12 +27,12 @@ const gameStore = useGameStore();
 watch(gameStore.currentPlayers, loadProfiles);
 
 async function loadProfiles() {
-  console.log("loadingprifiles");
   profiles.value.length = 0;
   for (const id of gameStore.currentPlayers) {
     profiles.value.push(await profileStore.getProfile(id));
   }
 }
+loadProfiles();
 
 const selected: Ref<number> = ref(-1);
 const canStart = computed(() => selected.value > -1);

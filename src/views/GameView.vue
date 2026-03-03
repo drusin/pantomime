@@ -16,18 +16,24 @@ const wordsStore = useWordsStore();
 const subject: Ref<string> = ref('');
 const content = ref<Image | null>(null);
 
+const showLoading = ref(false);
 watch(subject, async (val) => {
+  showLoading.value = true;
   const image = await imagesStore.getImage(val);
   content.value = { subject: val, image }
+  showLoading.value = false;
 });
 
 subject.value = wordsStore.currentWord;
 
 const router = useRouter();
 const gameStore = useGameStore();
+const showPicture = ref(false);
+
 function nextWord() {
   if (wordsStore.hasNext && !gameStore.isGameOver) {
     subject.value = wordsStore.nextWord();
+    showPicture.value = false;
   }
   else {
     router.push('/gameover');
@@ -46,7 +52,6 @@ onMounted(() => {
   }
 });
 
-const showPicture = ref(false);
 const selectPlayersWidget = useTemplateRef('select-players');
 
 const whoGuessedWidget = useTemplateRef('who-guessed');
@@ -61,7 +66,8 @@ const whoGuessedWidget = useTemplateRef('who-guessed');
     <div v-show="!showPicture" class="show-button-container">
       <button @click="() => showPicture = true">Bild zeigen!</button>
     </div>
-    <CardComponent :content="content" v-show="showPicture"></CardComponent>
+    <img src="/loader.svg" class="medium-element" v-show="showPicture && showLoading" />
+    <CardComponent :content="content" v-show="showPicture && !showLoading"></CardComponent>
   </div>
   <GameSettingsWidget @next="selectPlayersWidget?.open" ref="game-settings"></GameSettingsWidget>
   <SelectPlayersWidget ref="select-players"></SelectPlayersWidget>

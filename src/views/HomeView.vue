@@ -16,16 +16,23 @@ gameStore.reset();
     <header><h1>Pantomime</h1></header>
     <main>
       <div class="links">
-        <RouterLink to="/play">Los gehts!</RouterLink>
-        <RouterLink to="/profiles">Spieler</RouterLink>
-        <RouterLink to="/gallery">Gallerie</RouterLink>
+        <RouterLink class="link" to="/play"><img class="small-element" src="/player-play.svg" /> Los gehts!</RouterLink>
+        <RouterLink class="link" to="/profiles"><img class="small-element" src="/address-book.svg" /> Spieler</RouterLink>
+        <RouterLink class="link" to="/gallery"><img class="small-element" src="/cards.svg" /> Gallerie</RouterLink>
       </div>
     </main>
   </div>
 </template>
 
 <style scoped>
+
 .links {
   display: grid;
+  padding: 1rem;
+}
+
+.link {
+  font-size: 2rem;
+  padding: 1rem;
 }
 </style>
