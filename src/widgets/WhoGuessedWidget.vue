@@ -1,15 +1,15 @@
 <script setup lang="ts">
 
 import { useProfileStore } from "@/stores/profiles.ts";
-import { computed, ref, type Ref, useTemplateRef } from "vue";
+import { computed, ref, type Ref, useTemplateRef, watch } from "vue";
 import type { Profile } from "@/types.ts";
 import AvatarComponent from "@/components/AvatarComponent.vue";
-import PlusButton from "@/components/PlusButton.vue";
-import NewProfile from "@/components/NewProfile.vue";
 import { useGameStore } from "@/stores/game";
 
 defineExpose({ open });
-const emit = defineEmits([ 'next' ]);
+const emit = defineEmits<{
+  next: [id: number],
+}>();
 
 const dialog = useTemplateRef('dialog');
 function open() {
@@ -22,21 +22,26 @@ function close() {
 const profileStore = useProfileStore();
 const profiles: Ref<Array<Profile>> = ref([]);
 
+const gameStore = useGameStore();
+
+watch(gameStore.currentPlayers, loadProfiles);
+
 async function loadProfiles() {
-  profiles.value = await profileStore.getAllProfiles();
+  console.log("loadingprifiles");
+  profiles.value.length = 0;
+  for (const id of gameStore.currentPlayers) {
+    profiles.value.push(await profileStore.getProfile(id));
+  }
 }
 
-loadProfiles();
-const newProfile = useTemplateRef('new-profile');
+// loadProfiles();
 
-const selected = ref([]);
-const canStart = computed(() => selected.value.length > 0);
+const selected: Ref<number> = ref(-1);
+const canStart = computed(() => selected.value > -1);
 
-const gameStore = useGameStore();
 function next() {
-  gameStore.setPlayers(selected.value);
   close();
-  emit('next');
+  emit('next', selected.value);
 }
 
 </script>
@@ -45,7 +50,8 @@ function next() {
   <dialog ref="dialog">
     <article>
       <header>
-        Wer hat richtig geraten?
+        <p><strong>Wer hat richtig geraten?</strong></p>
+        <button aria-label="Close" rel="prev" @click="close"></button>
       </header>
       <fieldset>
         <div class="content">
@@ -57,7 +63,7 @@ function next() {
           </div>
         </div>
       </fieldset>
-      <button :disabled="!canStart" @click="next">Starten</button>
+      <button :disabled="!canStart" @click="next">Auswählen</button>
     </article>
   </dialog>
 </template>

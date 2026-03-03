@@ -11,7 +11,7 @@ export const useProfileStore = defineStore('profiles', {
     async createProfile(profilePicture: string) {
       return await createNewProfile(profilePicture);
     },
-    async getProfilePicture(id: number) {
+    async getProfile(id: number) {
       return await getProfile(id);
     },
     async getAllProfiles() {
