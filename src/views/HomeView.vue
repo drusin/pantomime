@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { useWordsStore } from "@/stores/words.ts";
 import { useGameStore } from "@/stores/game.ts";
+import { useImagesStore } from "@/stores/images";
+
+useImagesStore(); //ask for API key if necessary
 
 const words = useWordsStore();
 words.reset();
