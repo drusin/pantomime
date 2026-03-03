@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import GameView from '@/views/GameView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import GalleryView from '@/views/GalleryView.vue'
+import GameOverView from '@/views/GameOverView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,11 @@ const router = createRouter({
       path: '/gallery',
       name: 'gallery',
       component: GalleryView,
+    },
+    {
+      path: '/gameover',
+      name: 'gameover',
+      component: GameOverView,
     },
   ],
 })

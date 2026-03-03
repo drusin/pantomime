@@ -8,7 +8,7 @@ import { useGameStore } from "@/stores/game";
 
 defineExpose({ open });
 const emit = defineEmits<{
-  next: [id: number],
+  next: [],
 }>();
 
 const dialog = useTemplateRef('dialog');
@@ -34,14 +34,13 @@ async function loadProfiles() {
   }
 }
 
-// loadProfiles();
-
 const selected: Ref<number> = ref(-1);
 const canStart = computed(() => selected.value > -1);
 
 function next() {
   close();
-  emit('next', selected.value);
+  gameStore.addPoint(selected.value);
+  emit('next');
 }
 
 </script>

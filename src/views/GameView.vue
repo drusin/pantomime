@@ -8,6 +8,7 @@ import { useGameStore } from "@/stores/game.ts";
 import GameSettingsWidget from "@/widgets/GameSettingsWidget.vue";
 import SelectPlayersWidget from "@/widgets/SelectPlayersWidget.vue";
 import WhoGuessedWidget from '@/widgets/WhoGuessedWidget.vue';
+import { useRouter } from 'vue-router';
 
 const imagesStore = useImagesStore();
 const wordsStore = useWordsStore();
@@ -22,8 +23,15 @@ watch(subject, async (val) => {
 
 subject.value = wordsStore.currentWord;
 
+const router = useRouter();
+const gameStore = useGameStore();
 function nextWord() {
-  subject.value = wordsStore.nextWord();
+  if (wordsStore.hasNext && !gameStore.isGameOver) {
+    subject.value = wordsStore.nextWord();
+  }
+  else {
+    router.push('/gameover');
+  }
 }
 
 if (!subject.value) {
@@ -31,7 +39,6 @@ if (!subject.value) {
 }
 
 const gameSettingsWidget = useTemplateRef('game-settings');
-const gameStore = useGameStore();
 onMounted(() => {
   if (!gameStore.gameIsInProgress) {
     console.log(`trying to open ${gameSettingsWidget.value}`);

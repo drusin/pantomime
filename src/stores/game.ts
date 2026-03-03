@@ -43,6 +43,10 @@ export const useGameStore = defineStore('game', () => {
     return winners;
   });
 
+  function pointsFor(id: number) {
+    return currentScore.value[currentPlayers.value.indexOf(id)]! || -1;
+  }
+
   function setPlayers(ids: Array<number>) {
     currentPlayers.value.length = 0;
     currentScore.value.length = 0;
@@ -72,6 +76,7 @@ export const useGameStore = defineStore('game', () => {
     isGameOver,
     getWinner,
     gameIsInProgress,
+    pointsFor,
     setPlayers,
     addPoint,
     reset,
