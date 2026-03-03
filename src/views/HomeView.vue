@@ -9,11 +9,18 @@ const words = useWordsStore();
 words.reset();
 const gameStore = useGameStore();
 gameStore.reset();
+
+function requestFullscreen() {
+  document.documentElement.requestFullscreen();
+}
 </script>
 
 <template>
   <div class="container">
-    <header><h1>Pantomime</h1></header>
+    <header>
+      <h1>Pantomime</h1>
+      <button @click="requestFullscreen"><img src="/arrows-maximize.svg" /></button>
+    </header>
     <main>
       <div class="links">
         <RouterLink class="link" to="/play"><img class="small-element" src="/player-play.svg" /> Los gehts!</RouterLink>
@@ -25,6 +32,10 @@ gameStore.reset();
 </template>
 
 <style scoped>
+header {
+  display: flex;
+  justify-content: space-between;
+}
 
 .links {
   display: grid;
