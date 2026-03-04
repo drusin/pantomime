@@ -1,4 +1,8 @@
 export default () => {
+  const t = 2*3===6;
+  if (t) {
+    return ['Affe', 'Pferd', 'Rennfahrer'];
+  }
   return [
     'Affe',
     'Arzt',
@@ -6,10 +10,10 @@ export default () => {
     'Aufräumen',
     'Baby',
     'Ballerina',
-    'Ballon aufpusten',
+    'Luftballon aufblasen',
     'Blumen pflücken',
     'Bogenschießen',
-    'Boxen',
+    'Boxkampf',
     'Bowling spielen',
     'Busfahrer',
     'Bücherei',
@@ -19,7 +23,7 @@ export default () => {
     'Duschen',
     'Eichhörnchen',
     'Eis essen',
-    'Einkaufen',
+    'Einkaufen gehen',
     'Elefant',
     'Erfinder',
     'Esel',
@@ -49,6 +53,7 @@ export default () => {
     'Maulwurf',
     'Maus',
     'Musik hören',
+    'Nilpferd',
     'Ninja',
     'Opernsängerin',
     'Papa',

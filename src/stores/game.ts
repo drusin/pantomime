@@ -44,7 +44,8 @@ export const useGameStore = defineStore('game', () => {
   });
 
   function pointsFor(id: number) {
-    return currentScore.value[currentPlayers.value.indexOf(id)]! || -1;
+    const score = currentScore.value[currentPlayers.value.indexOf(id)];
+    return score === undefined ? -1 : score;
   }
 
   function setPlayers(ids: Array<number>) {

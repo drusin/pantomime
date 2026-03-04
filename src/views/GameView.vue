@@ -56,6 +56,11 @@ const selectPlayersWidget = useTemplateRef('select-players');
 
 const whoGuessedWidget = useTemplateRef('who-guessed');
 
+function badPicture() {
+  imagesStore.deleteSavedImage(subject.value);
+  nextWord();
+}
+
 </script>
 <template>
   <div class="container">
@@ -68,6 +73,7 @@ const whoGuessedWidget = useTemplateRef('who-guessed');
     </div>
     <img src="/loader.svg" class="medium-element" v-show="showPicture && showLoading" />
     <CardComponent :content="content" v-show="showPicture && !showLoading"></CardComponent>
+    <button class="secondary" v-show="showPicture && !showLoading" @click="badPicture"><img src="/cancel.svg" /></button>
   </div>
   <GameSettingsWidget @next="selectPlayersWidget?.open" ref="game-settings"></GameSettingsWidget>
   <SelectPlayersWidget ref="select-players"></SelectPlayersWidget>
