@@ -13,13 +13,15 @@ gameStore.reset();
 function requestFullscreen() {
   document.documentElement.requestFullscreen();
 }
+
+const isPwa = window.matchMedia('(display-mode: standalone)').matches;
 </script>
 
 <template>
   <div class="container">
     <header>
       <h1>Pantomime</h1>
-      <button @click="requestFullscreen"><img src="/arrows-maximize.svg" /></button>
+      <button v-if="!isPwa" @click="requestFullscreen"><img src="/arrows-maximize.svg" /></button>
     </header>
     <main>
       <div class="links">
