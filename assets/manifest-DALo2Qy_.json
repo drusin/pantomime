@@ -12,6 +12,7 @@
       "sizes": "192x192"
     }
   ],
+  "id": "pantomime/",
   "start_url": "/pantomime/",
   "display": "standalone"
 }
