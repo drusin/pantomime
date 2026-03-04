@@ -13,6 +13,6 @@
     }
   ],
   "scope": "/pantomime/",
-  "start_url": "./",
+  "start_url": "/pantomime/",
   "display": "standalone"
 }
