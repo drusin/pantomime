@@ -14,6 +14,7 @@ const imagesStore = useImagesStore();
 const wordsStore = useWordsStore();
 
 const subject: Ref<string> = ref('');
+const nextSubject: Ref<string> = ref('');
 const content = ref<Image | null>(null);
 
 const showLoading = ref(false);
@@ -28,12 +29,12 @@ subject.value = wordsStore.currentWord;
 
 const router = useRouter();
 const gameStore = useGameStore();
-const showPicture = ref(false);
+const pictureIsShown = ref(false);
 
 function nextWord() {
-  if (wordsStore.hasNext && !gameStore.isGameOver) {
-    subject.value = wordsStore.nextWord();
-    showPicture.value = false;
+  if (nextSubject.value && !gameStore.isGameOver) {
+    pictureIsShown.value = false;
+    subject.value = nextSubject.value;
   }
   else {
     router.push('/gameover');
@@ -41,6 +42,7 @@ function nextWord() {
 }
 
 if (!subject.value) {
+  nextSubject.value = wordsStore.nextWord();
   nextWord();
 }
 
@@ -61,19 +63,26 @@ function badPicture() {
   nextWord();
 }
 
+function showPicture() {
+  if (wordsStore.hasNext) {
+    nextSubject.value = wordsStore.nextWord();
+    imagesStore.getImage(nextSubject.value);
+  }
+  pictureIsShown.value = true;
+}
 </script>
 <template>
   <div class="container">
     <header>
       <h1>Spiel läuft!</h1>
-      <button @click="whoGuessedWidget?.open" v-show="showPicture">Erraten!</button>
+      <button @click="whoGuessedWidget?.open" v-show="pictureIsShown">Erraten!</button>
     </header>
-    <div v-show="!showPicture" class="show-button-container">
-      <button @click="() => showPicture = true">Bild zeigen!</button>
+    <div v-show="!pictureIsShown" class="show-button-container">
+      <button @click="showPicture">Bild zeigen!</button>
     </div>
-    <img src="/loader.svg" class="medium-element" v-show="showPicture && showLoading" />
-    <CardComponent :content="content" v-show="showPicture && !showLoading"></CardComponent>
-    <button class="secondary" v-show="showPicture && !showLoading" @click="badPicture"><img src="/cancel.svg" /></button>
+    <img src="/loader.svg" class="medium-element" v-show="pictureIsShown && showLoading" />
+    <CardComponent :content="content" v-show="pictureIsShown && !showLoading"></CardComponent>
+    <button class="secondary" v-show="pictureIsShown && !showLoading" @click="badPicture"><img src="/cancel.svg" /></button>
   </div>
   <GameSettingsWidget @next="selectPlayersWidget?.open" ref="game-settings"></GameSettingsWidget>
   <SelectPlayersWidget ref="select-players"></SelectPlayersWidget>

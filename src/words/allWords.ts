@@ -1,8 +1,4 @@
 export default () => {
-  const t = 2*3===6;
-  if (t) {
-    return ['Affe', 'Pferd', 'Rennfahrer'];
-  }
   return [
     'Affe',
     'Arzt',
